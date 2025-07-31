@@ -48,13 +48,13 @@
             // 
             // comboBoxQuestionType
             // 
+            comboBoxQuestionType.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxQuestionType.FormattingEnabled = true;
             comboBoxQuestionType.ImeMode = ImeMode.On;
             comboBoxQuestionType.Location = new Point(623, 94);
             comboBoxQuestionType.Name = "comboBoxQuestionType";
             comboBoxQuestionType.Size = new Size(114, 23);
             comboBoxQuestionType.TabIndex = 5;
-            comboBoxQuestionType.Text = "Question Type";
             comboBoxQuestionType.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // panelInputArea
@@ -63,7 +63,6 @@
             panelInputArea.Name = "panelInputArea";
             panelInputArea.Size = new Size(500, 338);
             panelInputArea.TabIndex = 7;
-            panelInputArea.Paint += panel1_Paint;
             // 
             // listBoxQuestions
             // 
@@ -73,6 +72,7 @@
             listBoxQuestions.Name = "listBoxQuestions";
             listBoxQuestions.Size = new Size(321, 364);
             listBoxQuestions.TabIndex = 8;
+            listBoxQuestions.SelectedIndexChanged += listBoxQuestions_SelectedIndexChanged;
             // 
             // HomeBtn
             // 

@@ -90,6 +90,7 @@
             // 
             // comboBoxCorrectAnswer
             // 
+            comboBoxCorrectAnswer.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxCorrectAnswer.FormattingEnabled = true;
             comboBoxCorrectAnswer.ImeMode = ImeMode.On;
             comboBoxCorrectAnswer.Items.AddRange(new object[] { "A", "B", "C", "D" });
@@ -97,7 +98,6 @@
             comboBoxCorrectAnswer.Name = "comboBoxCorrectAnswer";
             comboBoxCorrectAnswer.Size = new Size(46, 23);
             comboBoxCorrectAnswer.TabIndex = 8;
-            comboBoxCorrectAnswer.Text = "Question Type";
             // 
             // label7
             // 

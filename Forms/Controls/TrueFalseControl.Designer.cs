@@ -29,12 +29,12 @@
         private void InitializeComponent()
         {
             MultipleChoiceQuestionPanel = new Panel();
+            DeleteBtn = new Button();
             CreateQuestionBtn = new Button();
             comboBoxCorrectAnswer = new ComboBox();
             label7 = new Label();
             label2 = new Label();
             textBox1 = new TextBox();
-            DeleteBtn = new Button();
             MultipleChoiceQuestionPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -51,6 +51,17 @@
             MultipleChoiceQuestionPanel.Size = new Size(500, 338);
             MultipleChoiceQuestionPanel.TabIndex = 9;
             // 
+            // DeleteBtn
+            // 
+            DeleteBtn.BackColor = Color.OrangeRed;
+            DeleteBtn.Location = new Point(332, 257);
+            DeleteBtn.Name = "DeleteBtn";
+            DeleteBtn.Size = new Size(125, 50);
+            DeleteBtn.TabIndex = 21;
+            DeleteBtn.Text = "Delete";
+            DeleteBtn.UseVisualStyleBackColor = false;
+            DeleteBtn.Visible = false;
+            // 
             // CreateQuestionBtn
             // 
             CreateQuestionBtn.Location = new Point(167, 257);
@@ -62,6 +73,7 @@
             // 
             // comboBoxCorrectAnswer
             // 
+            comboBoxCorrectAnswer.DropDownStyle = ComboBoxStyle.DropDownList;
             comboBoxCorrectAnswer.FormattingEnabled = true;
             comboBoxCorrectAnswer.ImeMode = ImeMode.On;
             comboBoxCorrectAnswer.Items.AddRange(new object[] { "True", "False" });
@@ -69,7 +81,6 @@
             comboBoxCorrectAnswer.Name = "comboBoxCorrectAnswer";
             comboBoxCorrectAnswer.Size = new Size(46, 23);
             comboBoxCorrectAnswer.TabIndex = 8;
-            comboBoxCorrectAnswer.Text = "Question Type";
             // 
             // label7
             // 
@@ -95,17 +106,6 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(272, 23);
             textBox1.TabIndex = 7;
-            // 
-            // DeleteBtn
-            // 
-            DeleteBtn.BackColor = Color.OrangeRed;
-            DeleteBtn.Location = new Point(332, 257);
-            DeleteBtn.Name = "DeleteBtn";
-            DeleteBtn.Size = new Size(125, 50);
-            DeleteBtn.TabIndex = 21;
-            DeleteBtn.Text = "Delete";
-            DeleteBtn.UseVisualStyleBackColor = false;
-            DeleteBtn.Visible = false;
             // 
             // TrueFalseControl
             // 

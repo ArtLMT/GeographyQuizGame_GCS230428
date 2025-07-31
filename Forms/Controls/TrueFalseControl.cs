@@ -29,9 +29,9 @@ namespace GeographyQuizGame.Forms.Controls
 
             if (question != null)
             {
-                editingQuestion = question;
-                textBox1.Text = question.GetQuestionText();
-                comboBoxCorrectAnswer.SelectedItem = question.GetCorrectAnswer();
+                this.editingQuestion = question;
+                textBox1.Text = this.editingQuestion.GetQuestionText();
+                comboBoxCorrectAnswer.SelectedItem = this.editingQuestion.GetCorrectAnswer();
                 CreateQuestionBtn.Text = "Update Question";
                 DeleteBtn.Visible = true;
             }
@@ -39,7 +39,7 @@ namespace GeographyQuizGame.Forms.Controls
 
         private void CreateQuestionBtn_Click(object sender, EventArgs e)
         {
-            if (editingQuestion == null)
+            if (this.editingQuestion == null)
             {
                 Console.WriteLine("Create Question Button Clicked");
                 string questionText = textBox1.Text;
@@ -54,8 +54,8 @@ namespace GeographyQuizGame.Forms.Controls
             else
             {
                 Console.WriteLine("Update Question Button Clicked");
-                editingQuestion.SetQuestionText(textBox1.Text);
-                editingQuestion.SetCorrectAnswer(comboBoxCorrectAnswer.SelectedItem.ToString());
+                this.editingQuestion.SetQuestionText(textBox1.Text);
+                this.editingQuestion.SetCorrectAnswer(comboBoxCorrectAnswer.SelectedItem.ToString());
                 MessageBox.Show("Question updated!");
             }
             parentForm.RefreshQuestionList();

@@ -43,6 +43,10 @@ namespace GeographyQuizGame.Services
                 {
                     question.SetId(currentId++);
                 }
+            } else
+            {
+                MessageBox.Show("Question not found in the list.");
+                return;
             }
         }
     }

@@ -19,11 +19,12 @@ namespace GeographyQuizGame.Forms
         public AddQuestionBase()
         {
             InitializeComponent();
+            RefreshQuestionList();
 
             // Hook the combo box event manually to be safe
             comboBoxQuestionType.SelectedIndexChanged += comboBoxQuestionType_SelectedIndexChanged;
             HomeBtn.Click += HomeBtn_Click;
-            listBoxQuestions.DoubleClick += ListBoxQuestions_DoubleClick;
+            listBoxQuestions.Click += ListBoxQuestions_Click;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
@@ -38,16 +39,6 @@ namespace GeographyQuizGame.Forms
             comboBoxQuestionType.Items.Add("True/False");
             comboBoxQuestionType.Items.Add("Open-ended");
             comboBoxQuestionType.SelectedItem = "Multiple Choice";
-        }
-
-        private void panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
         }
 
         private void comboBoxQuestionType_SelectedIndexChanged(object sender, EventArgs e)
@@ -101,7 +92,7 @@ namespace GeographyQuizGame.Forms
             }
         }
 
-        private void ListBoxQuestions_DoubleClick(object sender, EventArgs e)
+        private void ListBoxQuestions_Click(object sender, EventArgs e)
         {
             if (listBoxQuestions.SelectedItem is Question selectedQuestion)
             {
@@ -134,6 +125,9 @@ namespace GeographyQuizGame.Forms
             }
         }
 
+        private void listBoxQuestions_SelectedIndexChanged(object sender, EventArgs e)
+        {
 
+        }
     }
 }

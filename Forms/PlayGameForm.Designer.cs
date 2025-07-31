@@ -32,6 +32,7 @@
             panelInputArea = new Panel();
             label1 = new Label();
             Timer = new Label();
+            HomeBtn = new Button();
             SuspendLayout();
             // 
             // listBoxQuestions
@@ -72,10 +73,20 @@
             Timer.TabIndex = 13;
             Timer.Text = "00:00";
             // 
+            // HomeBtn
+            // 
+            HomeBtn.Location = new Point(35, 15);
+            HomeBtn.Name = "HomeBtn";
+            HomeBtn.Size = new Size(125, 50);
+            HomeBtn.TabIndex = 14;
+            HomeBtn.Text = "Home";
+            HomeBtn.UseVisualStyleBackColor = true;
+            // 
             // PlayGameForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(HomeBtn);
             Controls.Add(Timer);
             Controls.Add(label1);
             Controls.Add(listBoxQuestions);
@@ -92,5 +103,6 @@
         private Panel panelInputArea;
         private Label label1;
         private Label Timer;
+        private Button HomeBtn;
     }
 }

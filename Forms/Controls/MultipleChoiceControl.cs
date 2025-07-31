@@ -47,6 +47,18 @@ namespace GeographyQuizGame.Forms.Controls
 
         private void CreateMultiQuestionBtn_Click(object sender, EventArgs e)
         {
+            if (Validator.isNullOrEmpty(textBox1.Text))
+            {
+                MessageBox.Show("Question text cannot be empty.");
+                return;
+            }
+
+            if (Validator.isNullOrEmpty(OptionA.Text) || Validator.isNullOrEmpty(OptionB.Text) || Validator.isNullOrEmpty(OptionC.Text) || Validator.isNullOrEmpty(OptionD.Text))
+            {
+                MessageBox.Show("All options must be filled out.");
+                return;
+            }
+
             if (editingQuestion != null)
             {
                 //Console.WriteLine("Update Question Button Clicked");
@@ -63,6 +75,7 @@ namespace GeographyQuizGame.Forms.Controls
             {
 
                 //Console.WriteLine("Create Question Button Clicked");
+               
                 string questionText = textBox1.Text;
                 var options = new Dictionary<string, string>
                 {

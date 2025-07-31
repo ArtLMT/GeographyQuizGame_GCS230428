@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace GeographyQuizGame.Forms.Controls
 {
@@ -35,7 +36,18 @@ namespace GeographyQuizGame.Forms.Controls
 
         private void CreateQuestionBtn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("Create Question Button Clicked");
+            //Console.WriteLine("Create Question Button Clicked");
+            if (Validator.isNullOrEmpty(textBox1.Text))
+            {
+                MessageBox.Show("Question text cannot be empty.");
+                return;
+            }
+
+            if (Validator.isNullOrEmpty(AcceptableAnswerBox.Text))
+            {
+                MessageBox.Show("Acceptable answers cannot be empty.");
+                return;
+            }
 
             string questionText = textBox1.Text;
             string acceptableAnswers = AcceptableAnswerBox.Text;
@@ -54,7 +66,7 @@ namespace GeographyQuizGame.Forms.Controls
 
                 QuestionManager.AddQuestion(question);
 
-                MessageBox.Show("New question created!");
+                //MessageBox.Show("New question created!");
             }
 
             parentForm.RefreshQuestionList();
