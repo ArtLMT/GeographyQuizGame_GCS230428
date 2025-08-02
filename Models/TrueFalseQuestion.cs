@@ -8,39 +8,27 @@ namespace GeographyQuizGame.Models
 {
     public class TrueFalseQuestion : Question
     {
-        private String CorrectAnswer { get; set; } // "True" or "False"
-        public string GetCorrectAnswer() => CorrectAnswer;
-        public void SetCorrectAnswer(string answer)
-        {
-            if (answer != "True" && answer != "False")
-            {
-                throw new ArgumentException("Correct answer must be 'True' or 'False'.");
-            }
-            CorrectAnswer = answer;
-        }
+        public string correctAnswer { get; set; }
+
 
         public TrueFalseQuestion()
         {
-            CorrectAnswer = string.Empty;
+            
         }
 
-        public TrueFalseQuestion( int id, String questionText, String correctAnswer) : base(id, questionText)
+        public TrueFalseQuestion(int id, string questionText, string correctAnswer) : base(id, questionText)
         {
-            if (correctAnswer != "True" && correctAnswer != "False")
-            {
-                throw new ArgumentException("Correct answer must be 'True' or 'False'."); 
-            }
-            CorrectAnswer = correctAnswer;
+            this.correctAnswer = correctAnswer;
         }
 
         public override bool IsCorrectAnswer(string userAnswer)
         {
-            return string.Equals(userAnswer, CorrectAnswer, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(userAnswer, correctAnswer, StringComparison.OrdinalIgnoreCase);
         }
 
         public override string ToString()
         {
-            return base.ToString() + " [True False]";
+            return base.ToString() + " [True/False]";
         }
     }
 }

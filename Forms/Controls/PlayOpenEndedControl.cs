@@ -1,4 +1,7 @@
-﻿using System;
+﻿using GeographyQuizGame.Models;
+using GeographyQuizGame.Services;
+using GeographyQuizGame.Services.Implement;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,32 +11,29 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-using GeographyQuizGame.Models;
-
 namespace GeographyQuizGame.Forms
 {
     public partial class PlayOpenEndedControl : UserControl
     {
         public event Action<bool> Answered;
         private OpenEndedQuestion question;
+        private OpenEndedService service;
+
         public PlayOpenEndedControl(OpenEndedQuestion question)
         {
             InitializeComponent();
             this.question = question;
+            this.service = new OpenEndedServiceImpl();
+
             QuestionText.Text = this.question.GetQuestionText();
-            NextBtn.Click += new System.EventHandler(this.NextBtn_Click);
-
+            NextBtn.Click += NextBtn_Click;
         }
 
-        public void NextBtn_Click(object sender, EventArgs e)
+        private void NextBtn_Click(object sender, EventArgs e)
         {
-            bool isCorrect = checkAnswer(UserAnswerBtn.Text);
+            string userAnswer = UserAnswerBtn.Text;
+            bool isCorrect = service.CheckAnswer(question, userAnswer);
             Answered?.Invoke(isCorrect);
-        }
-
-        public bool checkAnswer(string userAnswer)
-        {
-            return this.question.IsCorrectAnswer(userAnswer);
         }
     }
 }

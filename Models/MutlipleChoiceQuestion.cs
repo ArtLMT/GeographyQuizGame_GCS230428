@@ -1,35 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GeographyQuizGame.Models
 {
     public class MultipleChoiceQuestion : Question
     {
-        public Dictionary<string, string> Options { get; private set; }
-        public string CorrectAnswerKey { get; private set; }
-
-        public void SetOptions(Dictionary<string, string> options)
-        {
-            this.Options = options;
-        }
-
-        public Dictionary<string, string> GetOptions()
-        {
-            return Options;
-        }
-
-        public void SetCorrectAnswerKey(string correctAnswerKey)
-        {
-            this.CorrectAnswerKey = correctAnswerKey;
-        }
-
-        public string GetCorrectAnswerKey()
-        {
-            return CorrectAnswerKey;
-        }
+        public Dictionary<string, string> Options { get; set; }
+        public string CorrectAnswerKey { get; set; }
 
         public MultipleChoiceQuestion()
         {
@@ -37,21 +14,21 @@ namespace GeographyQuizGame.Models
             CorrectAnswerKey = string.Empty;
         }
 
-        public MultipleChoiceQuestion(Dictionary<string, string> options, int id, string questionText, string correctAnswerKey)
+        public MultipleChoiceQuestion(int id, string questionText, Dictionary<string, string> options, string correctAnswerKey)
             : base(id, questionText)
         {
-            this.Options = options;
-            this.CorrectAnswerKey = correctAnswerKey;
+            Options = options;
+            CorrectAnswerKey = correctAnswerKey;
         }
 
-        public override bool IsCorrectAnswer(string answerKey)
+        public override bool IsCorrectAnswer(string userAnswerKey)
         {
-            return string.Equals(answerKey, CorrectAnswerKey, StringComparison.OrdinalIgnoreCase);
+            return string.Equals(userAnswerKey, CorrectAnswerKey, StringComparison.OrdinalIgnoreCase);
         }
 
         public string GetCorrectAnswerText()
         {
-            return Options.ContainsKey(CorrectAnswerKey) ? Options[CorrectAnswerKey] : string.Empty;
+            return Options.TryGetValue(CorrectAnswerKey, out var text) ? text : string.Empty;
         }
 
         public override string ToString()
@@ -59,5 +36,4 @@ namespace GeographyQuizGame.Models
             return base.ToString() + " [Multiple Choice]";
         }
     }
-
 }

@@ -71,12 +71,12 @@ namespace GeographyQuizGame.Forms.Controls
                 String questionText = question.GetQuestionText();
                 if (question is MultipleChoiceQuestion mcq)
                 {
-                    String correctAnswer = mcq.GetCorrectAnswerKey();
+                    String correctAnswer = mcq.GetCorrectAnswerText();
                     listBoxQuestions.Items.Add(questionText + ", correct answer: " + correctAnswer);
                 }
                 else if (question is TrueFalseQuestion tfq)
                 {
-                    String correctAnswer = tfq.GetCorrectAnswer();
+                    String correctAnswer = tfq.correctAnswer;
                     listBoxQuestions.Items.Add(questionText + ", correct answer: " + correctAnswer);
                 }
                 else if (question is OpenEndedQuestion oeq)

@@ -34,7 +34,7 @@
             comboBoxCorrectAnswer = new ComboBox();
             label7 = new Label();
             label2 = new Label();
-            textBox1 = new TextBox();
+            QuestionTextInput = new TextBox();
             MultipleChoiceQuestionPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -45,7 +45,7 @@
             MultipleChoiceQuestionPanel.Controls.Add(comboBoxCorrectAnswer);
             MultipleChoiceQuestionPanel.Controls.Add(label7);
             MultipleChoiceQuestionPanel.Controls.Add(label2);
-            MultipleChoiceQuestionPanel.Controls.Add(textBox1);
+            MultipleChoiceQuestionPanel.Controls.Add(QuestionTextInput);
             MultipleChoiceQuestionPanel.Location = new Point(3, 3);
             MultipleChoiceQuestionPanel.Name = "MultipleChoiceQuestionPanel";
             MultipleChoiceQuestionPanel.Size = new Size(500, 338);
@@ -79,13 +79,13 @@
             comboBoxCorrectAnswer.Items.AddRange(new object[] { "True", "False" });
             comboBoxCorrectAnswer.Location = new Point(167, 99);
             comboBoxCorrectAnswer.Name = "comboBoxCorrectAnswer";
-            comboBoxCorrectAnswer.Size = new Size(46, 23);
+            comboBoxCorrectAnswer.Size = new Size(89, 23);
             comboBoxCorrectAnswer.TabIndex = 8;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(45, 107);
+            label7.Location = new Point(45, 102);
             label7.Name = "label7";
             label7.Size = new Size(88, 15);
             label7.TabIndex = 18;
@@ -100,12 +100,12 @@
             label2.TabIndex = 8;
             label2.Text = "Question Text";
             // 
-            // textBox1
+            // QuestionTextInput
             // 
-            textBox1.Location = new Point(167, 57);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(272, 23);
-            textBox1.TabIndex = 7;
+            QuestionTextInput.Location = new Point(167, 57);
+            QuestionTextInput.Name = "QuestionTextInput";
+            QuestionTextInput.Size = new Size(272, 23);
+            QuestionTextInput.TabIndex = 7;
             // 
             // TrueFalseControl
             // 
@@ -125,7 +125,7 @@
         private ComboBox comboBoxCorrectAnswer;
         private Label label7;
         private Label label2;
-        private TextBox textBox1;
+        private TextBox QuestionTextInput;
         private Button CreateQuestionBtn;
         private Button DeleteBtn;
     }

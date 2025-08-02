@@ -1,5 +1,6 @@
 ﻿using GeographyQuizGame.Models;
 using GeographyQuizGame.Services;
+using GeographyQuizGame.Services.Implement;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.Design.AxImporter;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace GeographyQuizGame.Forms.Controls
@@ -17,29 +19,32 @@ namespace GeographyQuizGame.Forms.Controls
     {
         private AddQuestionBase parentForm;
         private MultipleChoiceQuestion editingQuestion = null;
+        private MultipleChoiceService service;
         public MultipleChoiceControl(AddQuestionBase parentForm, MultipleChoiceQuestion question = null)
         {
             InitializeComponent();
+            this.parentForm = parentForm;
+            this.service = new MultipleChoiceServiceImpl();
+            this.editingQuestion = question;
+            
             comboBoxCorrectAnswer.SelectedItem = "A";
 
+            this.CreateMultiQuestionBtn.Click += CreateMultiQuestionBtn_Click;
+            this.DeleteBtn.Click += DeleteBtn_Click;
 
-            this.CreateMultiQuestionBtn.Click += new System.EventHandler(this.CreateMultiQuestionBtn_Click);
-            this.DeleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
-
-            this.parentForm = parentForm;
+            comboBoxCorrectAnswer.Items.Clear();
+            comboBoxCorrectAnswer.Items.AddRange(new object[] { "A", "B", "C", "D" });
+            comboBoxCorrectAnswer.SelectedIndex = 0;
 
             if (question != null)
             {
-                editingQuestion = question;
-                textBox1.Text = question.GetQuestionText();
-                foreach (var option in question.GetOptions())
-                {
-                    OptionA.Text= option.Key == "A" ? option.Value : OptionA.Text;
-                    OptionB.Text= option.Key == "B" ? option.Value : OptionB.Text;
-                    OptionC.Text= option.Key == "C" ? option.Value : OptionC.Text;
-                    OptionD.Text= option.Key == "D" ? option.Value : OptionD.Text;
-                }
-                comboBoxCorrectAnswer.SelectedItem = question.GetCorrectAnswerKey();
+                textBox1.Text = question.QuestionText;
+                OptionA.Text = question.Options.GetValueOrDefault("A", "");
+                OptionB.Text = question.Options.GetValueOrDefault("B", "");
+                OptionC.Text = question.Options.GetValueOrDefault("C", "");
+                OptionD.Text = question.Options.GetValueOrDefault("D", "");
+                comboBoxCorrectAnswer.SelectedItem = question.CorrectAnswerKey;
+
                 CreateMultiQuestionBtn.Text = "Update Question";
                 DeleteBtn.Visible = true;
             }
@@ -47,66 +52,42 @@ namespace GeographyQuizGame.Forms.Controls
 
         private void CreateMultiQuestionBtn_Click(object sender, EventArgs e)
         {
-            if (Validator.isNullOrEmpty(textBox1.Text))
+            try
             {
-                MessageBox.Show("Question text cannot be empty.");
-                return;
-            }
-
-            if (Validator.isNullOrEmpty(OptionA.Text) || Validator.isNullOrEmpty(OptionB.Text) || Validator.isNullOrEmpty(OptionC.Text) || Validator.isNullOrEmpty(OptionD.Text))
-            {
-                MessageBox.Show("All options must be filled out.");
-                return;
-            }
-
-            if (editingQuestion != null)
-            {
-                //Console.WriteLine("Update Question Button Clicked");
-                editingQuestion.SetQuestionText(textBox1.Text);
-                editingQuestion.SetOptions(new Dictionary<string, string>
-                {
-                    { "A", OptionA.Text },
-                    { "B", OptionB.Text },
-                    { "C", OptionC.Text },
-                    { "D", OptionD.Text }
-                });
-
-            } else
-            {
-
-                //Console.WriteLine("Create Question Button Clicked");
-               
                 string questionText = textBox1.Text;
-                var options = new Dictionary<string, string>
-                {
-                    { "A", OptionA.Text },
-                    { "B", OptionB.Text },
-                    { "C", OptionC.Text },
-                    { "D", OptionD.Text }
-                };
-
-                int questionId = QuestionManager.GetNextId();
-
+                Dictionary<string, string> options = new Dictionary<string, string>
+            {
+                { "A", OptionA.Text },
+                { "B", OptionB.Text },
+                { "C", OptionC.Text },
+                { "D", OptionD.Text }
+            };
                 string correctKey = comboBoxCorrectAnswer.SelectedItem?.ToString() ?? "A";
 
-                var question = new MultipleChoiceQuestion(options, questionId, questionText, correctKey);
-
-                QuestionManager.AddQuestion(question);
-            }
+                if (editingQuestion != null)
+                {
+                    service.UpdateQuestion(editingQuestion, questionText, options, correctKey);
+                    MessageBox.Show("Question updated!");
+                }
+                else
+                {
+                    service.CreateQuestion(questionText, options, correctKey);
+                    MessageBox.Show("New question added!");
+                }
 
                 parentForm.RefreshQuestionList();
-
-            //MessageBox.Show(
-            //    $"Question: {questionText}\n" +
-            //    $"A: {options["A"]}\nB: {options["B"]}\nC: {options["C"]}\nD: {options["D"]}\n" +
-            //    $"Correct Answer: {correctKey} ({question.GetCorrectAnswerText()})");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error: " + ex.Message, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
             if (editingQuestion != null)
             {
-                QuestionManager.DeleteQuestion(editingQuestion);
+                service.DeleteQuestion(editingQuestion);
                 parentForm.RefreshQuestionList();
                 MessageBox.Show("Question deleted!");
             }

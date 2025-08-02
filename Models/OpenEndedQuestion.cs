@@ -41,10 +41,7 @@ namespace GeographyQuizGame.Models
 
         public string GetCorrectAnswerText()
         {
-            // Return the acceptable answers as the correct answer text
-            string answers = AcceptableAnswers;
-            //return answers.Length > 0 ? answers[0].Trim() : string.Empty;
-            return answers;
+            return AcceptableAnswers;
         }
 
         public void SetAcceptableAnswers(string acceptableAnswers)

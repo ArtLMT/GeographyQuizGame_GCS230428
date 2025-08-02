@@ -21,10 +21,8 @@ namespace GeographyQuizGame.Forms.Controls
             InitializeComponent();
             this.question = question;
             QuestionText.Text = this.question.GetQuestionText();
-            //this.TrueButton.Click += TrueButton_Click;
-            //this.FalseButton.Click += FalseButton_Click;
-            this.TrueBtn.Click += new System.EventHandler(this.TrueButton_Click);
-            this.FalseBtn.Click += new System.EventHandler(this.FalseButton_Click);
+            TrueBtn.Click += TrueButton_Click;
+            FalseBtn.Click += FalseButton_Click;
         }
 
         private void TrueButton_Click(object sender, EventArgs e)
@@ -42,8 +40,7 @@ namespace GeographyQuizGame.Forms.Controls
 
         public void ShowCorrectAnswer()
         {
-            // Show the correct answer to the user
-            MessageBox.Show($"The correct answer is: {question.GetCorrectAnswer()}");
+            MessageBox.Show($"The correct answer is: {question.correctAnswer}");
         }
 
     }

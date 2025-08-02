@@ -1,5 +1,6 @@
 ﻿using GeographyQuizGame.Models;
 using GeographyQuizGame.Services;
+using GeographyQuizGame.Services.Implement;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,18 +18,22 @@ namespace GeographyQuizGame.Forms.Controls
     {
         private AddQuestionBase parentForm;
         private OpenEndedQuestion editingQuestion = null;
+        private OpenEndedService service;
+
         public OpenEndedControl(AddQuestionBase parentForm, OpenEndedQuestion question = null)
         {
             InitializeComponent();
             this.parentForm = parentForm;
-            this.CreateQuestionBtn.Click += new System.EventHandler(this.CreateQuestionBtn_Click);
-            this.DeleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
+            this.editingQuestion = question;
+            this.service = new OpenEndedServiceImpl();
 
-            if (question != null)
+            CreateQuestionBtn.Click += CreateQuestionBtn_Click;
+            DeleteBtn.Click += DeleteBtn_Click;
+
+            if (editingQuestion != null)
             {
-                editingQuestion = question;
-                textBox1.Text = question.GetQuestionText();
-                AcceptableAnswerBox.Text = question.GetCorrectAnswerText(); // Or show all acceptable answers
+                textBox1.Text = editingQuestion.GetQuestionText();
+                AcceptableAnswerBox.Text = editingQuestion.GetCorrectAnswerText(); // can show all instead
                 CreateQuestionBtn.Text = "Update Question";
                 DeleteBtn.Visible = true;
             }
@@ -36,48 +41,37 @@ namespace GeographyQuizGame.Forms.Controls
 
         private void CreateQuestionBtn_Click(object sender, EventArgs e)
         {
-            //Console.WriteLine("Create Question Button Clicked");
-            if (Validator.isNullOrEmpty(textBox1.Text))
-            {
-                MessageBox.Show("Question text cannot be empty.");
-                return;
-            }
-
-            if (Validator.isNullOrEmpty(AcceptableAnswerBox.Text))
-            {
-                MessageBox.Show("Acceptable answers cannot be empty.");
-                return;
-            }
-
             string questionText = textBox1.Text;
             string acceptableAnswers = AcceptableAnswerBox.Text;
 
-            if (this.editingQuestion != null) // Editing an existing question
+            try
             {
-                this.editingQuestion.SetQuestionText(questionText);
-                this.editingQuestion.SetAcceptableAnswers(acceptableAnswers);
+                if (editingQuestion != null)
+                {
+                    service.UpdateQuestion(editingQuestion, questionText, acceptableAnswers);
+                    MessageBox.Show("Question updated!");
+                }
+                else
+                {
+                    service.CreateQuestion(questionText, acceptableAnswers);
+                    MessageBox.Show("New question created!");
+                }
 
-                MessageBox.Show("Question updated!");
+                parentForm.RefreshQuestionList();
             }
-            else  // Creating a new question
+            catch (Exception ex)
             {
-                int questionId = QuestionManager.GetNextId();
-                OpenEndedQuestion question = new OpenEndedQuestion(acceptableAnswers, questionId, questionText);
-
-                QuestionManager.AddQuestion(question);
-
-                //MessageBox.Show("New question created!");
+                MessageBox.Show("Error: " + ex.Message, "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
-            parentForm.RefreshQuestionList();
         }
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
             if (editingQuestion != null)
             {
-                QuestionManager.DeleteQuestion(editingQuestion);
+                service.DeleteQuestion(editingQuestion);
                 parentForm.RefreshQuestionList();
+                parentForm.ReloadInputPanel();
                 MessageBox.Show("Question deleted!");
             }
             else
@@ -85,6 +79,5 @@ namespace GeographyQuizGame.Forms.Controls
                 MessageBox.Show("No question to delete.");
             }
         }
-
     }
 }

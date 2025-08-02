@@ -8,8 +8,9 @@ namespace GeographyQuizGame.Models
 {
     public abstract class Question
     {
-        private int id {get; set; }
-        private string QuestionText {get; set; }
+        public int id {get; set; }
+        public string QuestionText {get; set; }
+
         public string GetQuestionText() => QuestionText;
         public void SetQuestionText(string questionText) => QuestionText = questionText;
         public int GetId() => id;
@@ -27,6 +28,8 @@ namespace GeographyQuizGame.Models
         }
 
         public abstract bool IsCorrectAnswer(string answer);
+
+        // public abstract string GetCorrectAnswer();
 
         public override string ToString()
         {

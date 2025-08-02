@@ -105,17 +105,17 @@ namespace GeographyQuizGame.Forms
             panelInputArea.Controls.Clear();
             UserControl control = null;
 
-            if (question is MultipleChoiceQuestion mcq)
+            if (question is MultipleChoiceQuestion multipleChoiceQuestion)
             {
-                control = new MultipleChoiceControl(this, mcq); // Pass the question
+                control = new MultipleChoiceControl(this, multipleChoiceQuestion);
             }
-            else if (question is TrueFalseQuestion tfq)
+            else if (question is TrueFalseQuestion trueFalseQuestion)
             {
-                control = new TrueFalseControl(this, tfq);
+                control = new TrueFalseControl(this, trueFalseQuestion);
             }
-            else if (question is OpenEndedQuestion oeq)
+            else if (question is OpenEndedQuestion openEndedQuestion)
             {
-                control = new OpenEndedControl(this, oeq);
+                control = new OpenEndedControl(this, openEndedQuestion);
             }
 
             if (control != null)
@@ -129,5 +129,34 @@ namespace GeographyQuizGame.Forms
         {
 
         }
+
+        public void ReloadInputPanel()
+        {
+            string selectedType = comboBoxQuestionType.SelectedItem.ToString();
+
+            panelInputArea.Controls.Clear();
+
+            UserControl selectedControl = null;
+
+            if (selectedType == "Multiple Choice")
+            {
+                selectedControl = new MultipleChoiceControl(this);
+            }
+            else if (selectedType == "True/False")
+            {
+                selectedControl = new TrueFalseControl(this);
+            }
+            else if (selectedType == "Open-ended")
+            {
+                selectedControl = new OpenEndedControl(this);
+            }
+
+            if (selectedControl != null)
+            {
+                selectedControl.Dock = DockStyle.Fill;
+                panelInputArea.Controls.Add(selectedControl);
+            }
+        }
+
     }
 }

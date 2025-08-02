@@ -21,14 +21,18 @@ namespace GeographyQuizGame.Forms
         private List<Question> questionList;
         private int currentQuestionIndex = 0;
         private int userScore = 0;
+        private bool hasAnswered = false;
         private Stopwatch watch;
+        private GamePlayServiceImpl game;
+
 
 
         public PlayGameForm()
         {
             InitializeComponent();
             RefreshQuestionList();
-            play();
+            game = new GamePlayServiceImpl();
+            ShowNextQuestion();
 
             this.HomeBtn.Click += HomeBtn_Click;
         }
@@ -71,9 +75,45 @@ namespace GeographyQuizGame.Forms
             ShowNextQuestion();
         }
 
-        private void DisplayQuestion(Question question)
+        //private void DisplayQuestion(Question question)
+        //{
+        //    panelInputArea.Controls.Clear();
+
+        //    if (question is MultipleChoiceQuestion mcq)
+        //    {
+        //        var mcqControl = new PlayMutlipleChoiceControl(mcq);
+        //        mcqControl.Answered += OnUserAnswered;
+        //        panelInputArea.Controls.Add(mcqControl);
+        //        mcqControl.Dock = DockStyle.Fill;
+        //    }
+        //    else if (question is TrueFalseQuestion tfq)
+        //    {
+        //        var tfqControl = new PlayTrueFalseControl(tfq);
+        //        tfqControl.Answered += OnUserAnswered;
+        //        panelInputArea.Controls.Add(tfqControl);
+        //        tfqControl.Dock = DockStyle.Fill;
+        //    }
+        //    else if (question is OpenEndedQuestion oeq)
+        //    {
+        //        var oeqControl = new PlayOpenEndedControl(oeq);
+        //        oeqControl.Answered += OnUserAnswered;
+        //        panelInputArea.Controls.Add(oeqControl);
+        //        oeqControl.Dock = DockStyle.Fill;
+        //    }
+        //}
+
+        private void ShowNextQuestion()
         {
             panelInputArea.Controls.Clear();
+
+            if (!game.CanContinue)
+            {
+                EndGame();
+                return;
+            }
+
+            var question = game.GetCurrentQuestion();
+            hasAnswered = false;
 
             if (question is MultipleChoiceQuestion mcq)
             {
@@ -98,40 +138,27 @@ namespace GeographyQuizGame.Forms
             }
         }
 
-        private void ShowNextQuestion()
-        {
-            if (currentQuestionIndex < questionList.Count)
-            {
-                var question = questionList[currentQuestionIndex];
-                DisplayQuestion(question);
-            }
-            else
-            {
-                this.watch.Stop(); // Stop timer
-                TimeSpan elapsed = this.watch.Elapsed;
-                var parentForm = this.ParentForm as HomePage;
-
-                if (parentForm != null)
-                {
-                    var newPage = new ResultControl(userScore, questionList.Count, elapsed);
-                    parentForm.GamePanel.Controls.Clear();
-                    parentForm.GamePanel.Controls.Add(newPage);
-                    newPage.Dock = DockStyle.Fill;
-                }
-
-            }
-        }
 
         private void OnUserAnswered(bool isCorrect)
         {
-            //MessageBox.Show(isCorrect ? "✅ Correct!" : "❌ Wrong!");
-            if (isCorrect)
-            {
-                userScore++;
-            }
+            if (!game.SubmitAnswer(isCorrect)) return;
 
-            currentQuestionIndex++;
+            game.NextQuestion();
             ShowNextQuestion();
         }
+
+        private void EndGame()
+        {
+            var parentForm = this.ParentForm as HomePage;
+            if (parentForm != null)
+            {
+                var resultPage = new ResultControl(game.Score, game.TotalQuestions, game.Elapsed);
+                parentForm.GamePanel.Controls.Clear();
+                parentForm.GamePanel.Controls.Add(resultPage);
+                resultPage.Dock = DockStyle.Fill;
+            }
+        }
+
+
     }
 }

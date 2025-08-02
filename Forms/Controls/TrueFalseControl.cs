@@ -11,27 +11,35 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.Design.AxImporter;
 
+using GeographyQuizGame.Services.Implement;
+
 namespace GeographyQuizGame.Forms.Controls
 {
     public partial class TrueFalseControl : UserControl
     {
         private AddQuestionBase parentForm;
-        private TrueFalseQuestion editingQuestion = null;
+        private TrueFalseQuestion editingQuestion;
+        private TrueFalseServiceImpl service;
+
         public TrueFalseControl(AddQuestionBase parentForm, TrueFalseQuestion question = null)
         {
             InitializeComponent();
-            comboBoxCorrectAnswer.SelectedItem = "True";
             this.parentForm = parentForm;
-
-            this.CreateQuestionBtn.Click += new System.EventHandler(this.CreateQuestionBtn_Click);
             this.editingQuestion = question;
-            this.DeleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
+            this.service = new TrueFalseServiceImpl();
+
+            comboBoxCorrectAnswer.Items.Clear();
+            comboBoxCorrectAnswer.Items.Add("True");
+            comboBoxCorrectAnswer.Items.Add("False");
+            comboBoxCorrectAnswer.SelectedIndex = 0;
+
+            CreateQuestionBtn.Click += CreateQuestionBtn_Click;
+            DeleteBtn.Click += DeleteBtn_Click;
 
             if (question != null)
             {
-                this.editingQuestion = question;
-                textBox1.Text = this.editingQuestion.GetQuestionText();
-                comboBoxCorrectAnswer.SelectedItem = this.editingQuestion.GetCorrectAnswer();
+                QuestionTextInput.Text = editingQuestion.GetQuestionText();
+                comboBoxCorrectAnswer.SelectedItem = editingQuestion.correctAnswer;
                 CreateQuestionBtn.Text = "Update Question";
                 DeleteBtn.Visible = true;
             }
@@ -39,34 +47,36 @@ namespace GeographyQuizGame.Forms.Controls
 
         private void CreateQuestionBtn_Click(object sender, EventArgs e)
         {
-            if (this.editingQuestion == null)
+            string questionText = QuestionTextInput.Text;
+            string correctAnswer = comboBoxCorrectAnswer.SelectedItem?.ToString() ?? "True";
+            MessageBox.Show($"SelectedItem: {comboBoxCorrectAnswer.SelectedItem}");
+            try
             {
-                Console.WriteLine("Create Question Button Clicked");
-                string questionText = textBox1.Text;
+                if (editingQuestion == null)
+                {
+                    service.CreateQuestion(questionText, correctAnswer);
+                }
+                else
+                {
+                    service.UpdateQuestion(editingQuestion, questionText, correctAnswer);
+                    MessageBox.Show("Question updated!");
+                }
 
-                string correctKey = comboBoxCorrectAnswer.SelectedItem?.ToString() ?? "True";
-                int questionId = QuestionManager.GetNextId();
-
-                TrueFalseQuestion question = new TrueFalseQuestion(questionId, questionText, correctKey);
-
-                QuestionManager.AddQuestion(question);
+                parentForm.RefreshQuestionList();
             }
-            else
+            catch (Exception ex)
             {
-                Console.WriteLine("Update Question Button Clicked");
-                this.editingQuestion.SetQuestionText(textBox1.Text);
-                this.editingQuestion.SetCorrectAnswer(comboBoxCorrectAnswer.SelectedItem.ToString());
-                MessageBox.Show("Question updated!");
+                MessageBox.Show("Error: " + ex.Message, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            parentForm.RefreshQuestionList();
         }
 
         private void DeleteBtn_Click(object sender, EventArgs e)
         {
             if (editingQuestion != null)
             {
-                QuestionManager.DeleteQuestion(editingQuestion);
+                service.DeleteQuestion(editingQuestion);
                 parentForm.RefreshQuestionList();
+                parentForm.ReloadInputPanel();
                 MessageBox.Show("Question deleted!");
             }
             else
